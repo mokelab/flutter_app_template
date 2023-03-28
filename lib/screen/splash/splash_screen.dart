@@ -17,6 +17,8 @@ class _SplashScreenState extends State<SplashScreen> {
       if (account == null) {
         // go to login/signup screen
       }
+      if (!mounted) return;
+      Navigator.of(context).pushReplacementNamed("/top");
     } catch (e) {
       // show error dialog or go to login/signup screen
     }
