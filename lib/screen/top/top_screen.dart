@@ -8,6 +8,8 @@ class TopScreen extends StatefulWidget {
 }
 
 class _TopScreenState extends State<TopScreen> {
+  int _currentTabIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     final bottomNavigationItems = [
@@ -17,6 +19,14 @@ class _TopScreenState extends State<TopScreen> {
           icon: Icon(Icons.account_circle), label: "Account"),
     ];
     return Scaffold(
-        bottomNavigationBar: BottomNavigationBar(items: bottomNavigationItems));
+        bottomNavigationBar: BottomNavigationBar(
+      currentIndex: _currentTabIndex,
+      items: bottomNavigationItems,
+      onTap: (index) {
+        setState(() {
+          _currentTabIndex = index;
+        });
+      },
+    ));
   }
 }
