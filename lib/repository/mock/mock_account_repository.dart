@@ -6,4 +6,9 @@ class MockAccountRepository implements AccountRepository {
   Future<Account?> loginWithStoredToken() async {
     return null;
   }
+
+  @override
+  Future<Account> login(String email, String password) async {
+    return const Account(accountId: "mockAccount");
+  }
 }
