@@ -1,0 +1,24 @@
+name: Flutter Android
+
+on:
+  workflow_dispatch:
+#  push:
+#    branches: [ "main" ]
+#  pull_request:
+#    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Install Flutter"
+        run: sh ./.github/workflows/scripts/install-flutter.sh 3.3.5
+      - run: flutter pub get
+      - run: flutter build apk
+      - name: Upload apk file
+        uses: actions/upload-artifact@v1
+        with:
+          name: apk_releaes
+          path: build/app/outputs/flutter-apk/app-release.apk
