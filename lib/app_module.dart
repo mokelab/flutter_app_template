@@ -9,4 +9,9 @@ class AppModule extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) => false;
+
+  static AppModule of(BuildContext context) {
+    return context.getElementForInheritedWidgetOfExactType<AppModule>()?.widget
+        as AppModule;
+  }
 }
