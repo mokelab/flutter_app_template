@@ -16,6 +16,9 @@ class _SplashScreenState extends State<SplashScreen> {
       // check account status
       if (account == null) {
         // go to login/signup screen
+        if (!mounted) return;
+        Navigator.of(context).pushReplacementNamed("/login");
+        return;
       }
       if (!mounted) return;
       Navigator.of(context).pushReplacementNamed("/top");
