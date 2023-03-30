@@ -49,6 +49,15 @@ class _LoginScreenState extends State<LoginScreenMain> {
       case UiState.loginInProgress:
         // nop
         break;
+      case UiState.emptyInput:
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          const snackBar =
+              SnackBar(content: Text("Please input email/password"));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          context.read<LoginViewModel>().moveToIdle();
+        });
+        break;
       case UiState.success:
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (!mounted) return;
