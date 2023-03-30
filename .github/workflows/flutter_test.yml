@@ -1,0 +1,27 @@
+name: Flutter Test
+
+on:
+  pull_request:
+    branches: ["main"]
+#  push:
+#    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Install Flutter"
+        run: sh ./.github/workflows/scripts/install-flutter.sh 3.3.5
+      - run: flutter pub get
+      - name: Run test
+        run: flutter test --machine > test_report.log
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: "flutter test"
+          path: "test_report.log"
+          reporter: "flutter-json"
+          fail-on-error: "false"
