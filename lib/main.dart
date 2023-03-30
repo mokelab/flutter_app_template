@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'app_module.dart';
-import 'repository/mock/mock_account_repository.dart';
 
+import 'mock_module.dart';
 import 'routes.dart';
 
 void main() {
-  final accountRepository = MockAccountRepository();
-  runApp(
-      AppModule(accountRepository: accountRepository, child: const MainApp()));
+  runApp(MultiProvider(providers: [
+    Provider<AppModule>(create: (_) => MockAppModule()),
+  ], child: const MainApp()));
 }
 
 class MainApp extends StatelessWidget {

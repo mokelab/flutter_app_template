@@ -1,36 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:template/app_module.dart';
+import 'package:template/screen/splash/splash_viewmodel.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final module = Provider.of<AppModule>(context, listen: false);
+
+    return MultiProvider(providers: [
+      ChangeNotifierProvider<SplashViewModel>(
+          create: (_) => SplashViewModel(module.accountRepository())),
+    ], child: const SplashScreenMain());
+  }
+}
+
+class SplashScreenMain extends StatefulWidget {
+  const SplashScreenMain({super.key});
 
   @override
   State<StatefulWidget> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
-  void _setup() async {
-    final repo = AppModule.of(context).accountRepository;
-    try {
-      final account = await repo.loginWithStoredToken();
-      // check account status
-      if (account == null) {
-        // go to login/signup screen
-        if (!mounted) return;
-        Navigator.of(context).pushReplacementNamed("/login");
-        return;
-      }
-      if (!mounted) return;
-      Navigator.of(context).pushReplacementNamed("/top");
-    } catch (e) {
-      // show error dialog or go to login/signup screen
-    }
-  }
-
+class _SplashScreenState extends State<SplashScreenMain> {
   @override
   void initState() {
     super.initState();
-    _setup();
+    Provider.of<SplashViewModel>(context, listen: false).setup();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    switch (context.watch<SplashViewModel>().uiState) {
+      case UiState.initial:
+        // Nop
+        break;
+      case UiState.showLogin:
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          Navigator.of(context).pushReplacementNamed("/login");
+        });
+        break;
+      case UiState.showTop:
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          Navigator.of(context).pushReplacementNamed("/top");
+        });
+        break;
+    }
   }
 
   @override

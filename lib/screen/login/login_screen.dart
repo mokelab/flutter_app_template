@@ -1,30 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:template/app_module.dart';
+import 'package:provider/provider.dart';
+import "login_viewmodel.dart";
+import "../../app_module.dart";
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final module = Provider.of<AppModule>(context, listen: false);
+
+    return MultiProvider(providers: [
+      ChangeNotifierProvider<LoginViewModel>(
+          create: (_) => LoginViewModel(module.accountRepository())),
+    ], child: const LoginScreenMain());
+  }
+}
+
+class LoginScreenMain extends StatefulWidget {
+  const LoginScreenMain({super.key});
 
   @override
   State<StatefulWidget> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreenMain> {
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
 
   void _login() async {
-    final repo = AppModule.of(context).accountRepository;
-
     final email = _emailController.text;
     final password = _passwordController.text;
-    try {
-      final account = await repo.login(email, password);
-      // check account state if needed
-      if (!mounted) return;
-      Navigator.of(context).pushReplacementNamed("/top");
-    } catch (e) {
-      // show error
-    }
+    context.read<LoginViewModel>().login(email, password);
   }
 
   @override
@@ -32,6 +39,34 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    switch (context.watch<LoginViewModel>().uiState) {
+      case UiState.idle:
+      case UiState.loginInProgress:
+        // nop
+        break;
+      case UiState.success:
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          Navigator.of(context).pushReplacementNamed("/top");
+        });
+        break;
+      case UiState.error:
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          showDialog(
+              context: context,
+              builder: (context) => const AlertDialog(
+                    title: Text("Error"),
+                    actions: [],
+                  ));
+        });
+        break;
+    }
   }
 
   @override
