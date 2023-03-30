@@ -1,4 +1,4 @@
-import 'package:flutter_test/flutter_test.dart';
+import 'package:test/test.dart';
 import 'package:template/model/account.dart';
 import 'package:template/repository/mock/mock_account_repository.dart';
 import 'package:template/screen/splash/splash_viewmodel.dart';
