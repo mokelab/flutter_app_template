@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:template/screen/article/article_list_screen.dart';
 
 class TopScreen extends StatefulWidget {
   const TopScreen({super.key});
@@ -9,6 +10,17 @@ class TopScreen extends StatefulWidget {
 
 class _TopScreenState extends State<TopScreen> {
   int _currentTabIndex = 0;
+  late List<Widget> _screens;
+
+  @override
+  void initState() {
+    super.initState();
+    _screens = [
+      const ArticleListScreen(),
+      Container(),
+      Container(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +32,14 @@ class _TopScreenState extends State<TopScreen> {
     ];
     return Scaffold(
         bottomNavigationBar: BottomNavigationBar(
-      currentIndex: _currentTabIndex,
-      items: bottomNavigationItems,
-      onTap: (index) {
-        setState(() {
-          _currentTabIndex = index;
-        });
-      },
-    ));
+          currentIndex: _currentTabIndex,
+          items: bottomNavigationItems,
+          onTap: (index) {
+            setState(() {
+              _currentTabIndex = index;
+            });
+          },
+        ),
+        body: _screens[_currentTabIndex]);
   }
 }
