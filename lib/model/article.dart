@@ -16,4 +16,20 @@ class Article {
     required this.isNew,
     required this.score,
   });
+
+  static Article fromJson(Map<String, dynamic> data) {
+    String articleId = data["article_id"] as String;
+    String subject = data["subject"] as String;
+    int dateMillisecs = data["date"] as int;
+    String body = data["body"] as String;
+    bool isNew = data["is_new"] as bool;
+    double score = data["score"] + 0.0;
+    return Article(
+        articleId: articleId,
+        subject: subject,
+        date: DateTime.fromMillisecondsSinceEpoch(dateMillisecs),
+        body: body,
+        isNew: isNew,
+        score: score);
+  }
 }
