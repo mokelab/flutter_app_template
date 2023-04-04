@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:template/app_module.dart';
 import 'package:template/screen/article/article_list_viewmodel.dart';
+import 'package:template/widget/pagination_controller.dart';
 
 class ArticleListScreen extends StatelessWidget {
   const ArticleListScreen({super.key});
@@ -35,10 +36,16 @@ class _ArticleListScreenState extends State<_ArticleListScreen> {
         });
         break;
       case UiState.loading:
-        break;
       case UiState.success:
-        break;
       case UiState.error:
+      case UiState.loadingMore:
+        break;
+      case UiState.fetchMoreError:
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          const snackBar = SnackBar(content: Text("Failed to load articles"));
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          viewModel.notifyFetchMoreErrorConsumed();
+        });
         break;
     }
   }
@@ -54,12 +61,17 @@ class _ArticleListScreenState extends State<_ArticleListScreen> {
             alignment: Alignment.center,
             child: const CircularProgressIndicator());
       case UiState.success:
+      case UiState.loadingMore:
+      case UiState.fetchMoreError:
         return ListView.builder(
           itemBuilder: ((context, index) {
             final article = viewModel.articles[index];
             return ListTile(title: Text(article.subject));
           }),
           itemCount: viewModel.articles.length,
+          controller: PaginationController(() async {
+            viewModel.fetchMore();
+          }),
         );
       case UiState.error:
         return Container(
