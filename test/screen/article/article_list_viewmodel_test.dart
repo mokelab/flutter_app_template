@@ -14,10 +14,13 @@ void main() {
 
     articleRepository.getListResult = [
       Article(
-          articleId: "article1",
-          subject: "subject1",
-          date: DateTime.now(),
-          body: "body1")
+        articleId: "article1",
+        subject: "subject1",
+        date: DateTime.now(),
+        body: "body1",
+        isNew: false,
+        score: 48.3,
+      )
     ];
     await viewModel.fetch();
     expect(viewModel.uiState, UiState.success);

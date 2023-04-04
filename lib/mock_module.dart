@@ -25,10 +25,13 @@ class MockAppModule implements AppModule {
     List<Article> list = [];
     for (var i = 0; i < 20; i++) {
       list.add(Article(
-          articleId: "article$i",
-          subject: "Article $i",
-          date: DateTime.now(),
-          body: "Body $i"));
+        articleId: "article$i",
+        subject: "Article $i",
+        date: DateTime.now(),
+        body: "Body $i",
+        isNew: false,
+        score: i * 0.3,
+      ));
     }
     return list;
   }
