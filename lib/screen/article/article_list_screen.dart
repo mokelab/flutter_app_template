@@ -1,81 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import 'package:template/app_module.dart';
-import 'package:template/screen/article/article_list_viewmodel.dart';
-import 'package:template/widget/pagination_controller.dart';
+import 'package:template/model/article.dart';
 
-class ArticleListScreen extends StatelessWidget {
+class ArticleListScreen extends StatefulWidget {
   const ArticleListScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    final module = Provider.of<AppModule>(context, listen: false);
-
-    return MultiProvider(providers: [
-      ChangeNotifierProvider(
-          create: (context) => ArticleListViewModel(
-              articleRepository: module.articleRepository()))
-    ], child: _ArticleListScreen());
-  }
-}
-
-class _ArticleListScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _ArticleListScreenState();
 }
 
-class _ArticleListScreenState extends State<_ArticleListScreen> {
+class _ArticleListScreenState extends State<ArticleListScreen> {
+  final PagingController<DateTime, Article> _pagingController =
+      PagingController(firstPageKey: DateTime.now());
+
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final viewModel = context.watch<ArticleListViewModel>();
-    switch (viewModel.uiState) {
-      case UiState.initial:
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          viewModel.fetch();
-        });
-        break;
-      case UiState.loading:
-      case UiState.success:
-      case UiState.error:
-      case UiState.loadingMore:
-        break;
-      case UiState.fetchMoreError:
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          const snackBar = SnackBar(content: Text("Failed to load articles"));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          viewModel.notifyFetchMoreErrorConsumed();
-        });
-        break;
+  void initState() {
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetch(pageKey);
+    });
+    super.initState();
+  }
+
+  Future<void> _fetch(DateTime key) async {
+    final module = Provider.of<AppModule>(context, listen: false);
+    try {
+      final loadedArticles = await module.articleRepository().getList(key);
+      final hasNext = loadedArticles.isNotEmpty;
+      if (hasNext) {
+        _pagingController.appendPage(loadedArticles, loadedArticles.last.date);
+      } else {
+        _pagingController.appendLastPage(loadedArticles);
+      }
+    } catch (e) {
+      _pagingController.error = e;
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    final viewModel = context.watch<ArticleListViewModel>();
+  void dispose() {
+    _pagingController.dispose();
+    super.dispose();
+  }
 
-    switch (viewModel.uiState) {
-      case UiState.initial:
-      case UiState.loading:
-        return Container(
-            alignment: Alignment.center,
-            child: const CircularProgressIndicator());
-      case UiState.success:
-      case UiState.loadingMore:
-      case UiState.fetchMoreError:
-        return ListView.builder(
-          itemBuilder: ((context, index) {
-            final article = viewModel.articles[index];
-            return ListTile(title: Text(article.subject));
-          }),
-          itemCount: viewModel.articles.length,
-          controller: PaginationController(() async {
-            viewModel.fetchMore();
-          }),
-        );
-      case UiState.error:
-        return Container(
-            alignment: Alignment.center, child: const Text("Failed to load"));
-    }
+  @override
+  Widget build(BuildContext context) {
+    return PagedListView<DateTime, Article>(
+      pagingController: _pagingController,
+      builderDelegate: PagedChildBuilderDelegate<Article>(
+          itemBuilder: (context, article, index) {
+        return ListTile(title: Text(article.subject));
+      }),
+    );
   }
 }
