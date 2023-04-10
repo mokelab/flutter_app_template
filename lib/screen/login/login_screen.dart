@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import "login_viewmodel.dart";
 import "../../app_module.dart";
@@ -61,7 +62,7 @@ class _LoginScreenState extends State<LoginScreenMain> {
       case UiState.success:
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (!mounted) return;
-          Navigator.of(context).pushReplacementNamed("/top");
+          context.go("/top");
         });
         break;
       case UiState.error:
