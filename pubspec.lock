@@ -116,6 +116,11 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_web_plugins:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   frontend_server_client:
     dependency: transitive
     description:
@@ -130,6 +135,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
+  go_router:
+    dependency: "direct main"
+    description:
+      name: go_router
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "6.5.5"
   http_multi_server:
     dependency: transitive
     description:
@@ -164,7 +176,7 @@ packages:
       name: js
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.5"
+    version: "0.6.4"
   lints:
     dependency: transitive
     description:
@@ -417,4 +429,4 @@ packages:
     version: "3.1.1"
 sdks:
   dart: ">=2.18.2 <3.0.0"
-  flutter: ">=1.22.0"
+  flutter: ">=3.3.0"

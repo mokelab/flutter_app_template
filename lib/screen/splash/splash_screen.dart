@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:template/app_module.dart';
 import 'package:template/screen/splash/splash_viewmodel.dart';
@@ -41,13 +42,13 @@ class _SplashScreenState extends State<SplashScreenMain> {
       case UiState.showLogin:
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (!mounted) return;
-          Navigator.of(context).pushReplacementNamed("/login");
+          context.go("/login");
         });
         break;
       case UiState.showTop:
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (!mounted) return;
-          Navigator.of(context).pushReplacementNamed("/top");
+          context.go("/top");
         });
         break;
     }
