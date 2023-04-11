@@ -12,4 +12,15 @@ class MockArticleRepository implements ArticleRepository {
     }
     return getListResult!;
   }
+
+  Article? getByIdResult;
+  Exception? getByIdError;
+
+  @override
+  Future<Article> getById(ArticleId articleId) async {
+    if (getByIdError != null) {
+      throw getByIdError!;
+    }
+    return getByIdResult!;
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import 'package:template/app_module.dart';
@@ -50,7 +51,12 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
       pagingController: _pagingController,
       builderDelegate: PagedChildBuilderDelegate<Article>(
           itemBuilder: (context, article, index) {
-        return ListTile(title: Text(article.subject));
+        return ListTile(
+          title: Text(article.subject),
+          onTap: () {
+            context.go("/top/articles/${article.articleId}");
+          },
+        );
       }),
     );
   }

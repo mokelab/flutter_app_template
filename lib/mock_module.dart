@@ -16,6 +16,14 @@ class MockAppModule implements AppModule {
     accountRepository.loginResult = const Account(accountId: "account1");
     final articleRepository = MockArticleRepository();
     articleRepository.getListResult = _makeArticles();
+    articleRepository.getByIdResult = Article(
+      articleId: "1",
+      subject: "Detail Subject",
+      date: DateTime.now(),
+      body: "Detail body",
+      isNew: true,
+      score: 2.3,
+    );
 
     _accountRepository = accountRepository;
     _articleRepository = articleRepository;
