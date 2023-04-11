@@ -13,14 +13,14 @@ class MockArticleRepository implements ArticleRepository {
     return getListResult!;
   }
 
+  Article? getByIdResult;
+  Exception? getByIdError;
+
   @override
   Future<Article> getById(ArticleId articleId) async {
-    return Article(
-        articleId: articleId,
-        subject: "Subject $articleId",
-        date: DateTime.now(),
-        body: "Body $articleId",
-        isNew: true,
-        score: 2.3);
+    if (getByIdError != null) {
+      throw getByIdError!;
+    }
+    return getByIdResult!;
   }
 }
