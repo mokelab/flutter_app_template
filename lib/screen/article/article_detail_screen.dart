@@ -17,23 +17,43 @@ class ArticleDetailScreen extends StatelessWidget {
           create: (context) => ArticleDetailViewModel(
                 articleRepository: module.articleRepository(),
               )),
-    ], child: _ArticleDetailScreen());
+    ], child: _ArticleDetailScreen(articleId: articleId));
   }
 }
 
 class _ArticleDetailScreen extends StatefulWidget {
+  final ArticleId articleId;
+
+  const _ArticleDetailScreen({required this.articleId});
   @override
   State<StatefulWidget> createState() => _ArticleListScreenState();
 }
 
 class _ArticleListScreenState extends State<_ArticleDetailScreen> {
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final viewModel = context.watch<ArticleDetailViewModel>();
+    switch (viewModel.uiState) {
+      case UiState.initial:
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          viewModel.fetchData(widget.articleId);
+        });
+        break;
+      case UiState.loading:
+      case UiState.success:
+      case UiState.error:
+        break;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<ArticleDetailViewModel>(context);
+    final viewModel = context.watch<ArticleDetailViewModel>();
     switch (viewModel.uiState) {
       case UiState.initial:
       case UiState.loading:
-        return const Center(child: CircularProgressIndicator());
+        return const Scaffold(body: Center(child: CircularProgressIndicator()));
       case UiState.success:
         return Scaffold(
           appBar: AppBar(
