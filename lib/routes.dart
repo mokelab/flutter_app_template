@@ -24,7 +24,8 @@ final GoRouter router = GoRouter(
           GoRoute(
             path: 'articles/:id',
             pageBuilder: (context, state) => MaterialPage(
-              child: ArticleDetailScreen(articleId: state.params["id"]!),
+              child:
+                  ArticleDetailScreen(articleId: state.pathParameters["id"]!),
             ),
           ),
         ]),
