@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:template/repository/account_repository.dart';
 
 enum UiState {
@@ -7,12 +7,10 @@ enum UiState {
   showTop,
 }
 
-class SplashViewModel extends ChangeNotifier {
+class SplashViewModel extends StateNotifier<UiState> {
   final AccountRepository accountRepository;
 
-  SplashViewModel(this.accountRepository);
-
-  UiState uiState = UiState.initial;
+  SplashViewModel(this.accountRepository) : super(UiState.initial);
 
   Future<void> setup() async {
     try {
@@ -20,16 +18,13 @@ class SplashViewModel extends ChangeNotifier {
       // check account status
       if (account == null) {
         // go to login/signup screen
-        uiState = UiState.showLogin;
-        notifyListeners();
+        state = UiState.showLogin;
         return;
       }
-      uiState = UiState.showTop;
-      notifyListeners();
+      state = UiState.showTop;
     } catch (e) {
       // show error dialog or go to login/signup screen
-      uiState = UiState.showLogin;
-      notifyListeners();
+      state = UiState.showLogin;
     }
   }
 }

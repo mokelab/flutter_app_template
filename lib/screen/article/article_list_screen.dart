@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:provider/provider.dart';
 import 'package:template/app_module.dart';
 import 'package:template/model/article.dart';
 
-class ArticleListScreen extends StatefulWidget {
+class ArticleListScreen extends ConsumerStatefulWidget {
   const ArticleListScreen({super.key});
 
   @override
-  State<StatefulWidget> createState() => _ArticleListScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _ArticleListScreenState();
 }
 
-class _ArticleListScreenState extends State<ArticleListScreen> {
+class _ArticleListScreenState extends ConsumerState<ArticleListScreen> {
   final PagingController<DateTime, Article> _pagingController =
       PagingController(firstPageKey: DateTime.now());
 
@@ -25,9 +26,9 @@ class _ArticleListScreenState extends State<ArticleListScreen> {
   }
 
   Future<void> _fetch(DateTime key) async {
-    final module = Provider.of<AppModule>(context, listen: false);
+    final articleRepository = ref.read(articleRepositoryProvider);
     try {
-      final loadedArticles = await module.articleRepository().getList(key);
+      final loadedArticles = await articleRepository.getList(key);
       final hasNext = loadedArticles.isNotEmpty;
       if (hasNext) {
         _pagingController.appendPage(loadedArticles, loadedArticles.last.date);
