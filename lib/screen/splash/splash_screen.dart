@@ -33,9 +33,6 @@ class _SplashScreenState extends ConsumerState<SplashScreenMain> {
     ref.listenManual(_viewModelProvider, (previous, next) {
       switch (next) {
         case UiState.initial:
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            ref.read(_viewModelProvider.notifier).setup();
-          });
           break;
         case UiState.showLogin:
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -51,6 +48,7 @@ class _SplashScreenState extends ConsumerState<SplashScreenMain> {
           break;
       }
     });
+    ref.read(_viewModelProvider.notifier).setup();
     super.initState();
   }
 
