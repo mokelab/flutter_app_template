@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart' as p;
 import 'app_module.dart';
 
 import 'mock_module.dart';
 import 'routes.dart';
 
 void main() {
-  runApp(MultiProvider(providers: [
-    Provider<AppModule>(create: (_) => MockAppModule()),
-  ], child: const MainApp()));
+  runApp(
+    p.MultiProvider(
+      providers: [
+        p.Provider<AppModule>(create: (_) => MockAppModule()),
+      ],
+      child: ProviderScope(
+        overrides: mockProviders,
+        child: const MainApp(),
+      ),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
