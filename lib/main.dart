@@ -8,14 +8,9 @@ import 'routes.dart';
 
 void main() {
   runApp(
-    p.MultiProvider(
-      providers: [
-        p.Provider<AppModule>(create: (_) => MockAppModule()),
-      ],
-      child: ProviderScope(
-        overrides: mockProviders,
-        child: const MainApp(),
-      ),
+    ProviderScope(
+      overrides: mockProviders,
+      child: const MainApp(),
     ),
   );
 }
