@@ -1,38 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
+import 'package:template/app_module.dart';
 import "login_viewmodel.dart";
-import "../../app_module.dart";
+
+final viewModelProvider = StateNotifierProvider<LoginViewModel, UiState>((ref) {
+  final accountRepository = ref.read(accountRepositoryProvider);
+  return LoginViewModel(accountRepository);
+});
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final module = Provider.of<AppModule>(context, listen: false);
-
-    return MultiProvider(providers: [
-      ChangeNotifierProvider<LoginViewModel>(
-          create: (_) => LoginViewModel(module.accountRepository())),
-    ], child: const LoginScreenMain());
+    return const ProviderScope(child: LoginScreenMain());
   }
 }
 
-class LoginScreenMain extends StatefulWidget {
+class LoginScreenMain extends ConsumerStatefulWidget {
   const LoginScreenMain({super.key});
 
   @override
-  State<StatefulWidget> createState() => _LoginScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreenMain> {
+class _LoginScreenState extends ConsumerState<LoginScreenMain> {
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
 
   void _login() async {
     final email = _emailController.text;
     final password = _passwordController.text;
-    context.read<LoginViewModel>().login(email, password);
+    ref.read(viewModelProvider.notifier).login(email, password);
   }
 
   @override
@@ -40,43 +40,41 @@ class _LoginScreenState extends State<LoginScreenMain> {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    switch (context.watch<LoginViewModel>().uiState) {
-      case UiState.idle:
-      case UiState.loginInProgress:
-        // nop
-        break;
-      case UiState.emptyInput:
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted) return;
-          const snackBar =
-              SnackBar(content: Text("Please input email/password"));
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          context.read<LoginViewModel>().moveToIdle();
-        });
-        break;
-      case UiState.success:
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted) return;
-          context.go("/top");
-        });
-        break;
-      case UiState.error:
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!mounted) return;
-          showDialog(
+    ref.listenManual(viewModelProvider, (previous, next) {
+      switch (next) {
+        case UiState.idle:
+        case UiState.loginInProgress:
+          // nop
+          break;
+        case UiState.emptyInput:
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) return;
+            const snackBar =
+                SnackBar(content: Text("Please input email/password"));
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            ref.read(viewModelProvider.notifier).moveToIdle();
+          });
+          break;
+        case UiState.success:
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) return;
+            context.go("/top");
+          });
+          break;
+        case UiState.error:
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) return;
+            showDialog(
               context: context,
               builder: (context) => const AlertDialog(
-                    title: Text("Error"),
-                    actions: [],
-                  ));
-        });
-        break;
-    }
+                title: Text("Error"),
+                actions: [],
+              ),
+            );
+          });
+          break;
+      }
+    });
   }
 
   @override

@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:template/repository/account_repository.dart';
 
 enum UiState {
@@ -9,37 +9,30 @@ enum UiState {
   error,
 }
 
-class LoginViewModel extends ChangeNotifier {
+class LoginViewModel extends StateNotifier<UiState> {
   final AccountRepository accountRepository;
 
-  LoginViewModel(this.accountRepository);
-
-  UiState uiState = UiState.idle;
+  LoginViewModel(this.accountRepository) : super(UiState.idle);
 
   Future<void> login(String email, String password) async {
     if (email.trim().isEmpty || password.trim().isEmpty) {
-      uiState = UiState.emptyInput;
-      notifyListeners();
+      state = UiState.emptyInput;
       return;
     }
     try {
-      uiState = UiState.loginInProgress;
-      notifyListeners();
+      state = UiState.loginInProgress;
 
       final account = await accountRepository.login(email, password);
       // check account state if needed
 
-      uiState = UiState.success;
-      notifyListeners();
+      state = UiState.success;
     } catch (e) {
       // show error
-      uiState = UiState.error;
-      notifyListeners();
+      state = UiState.error;
     }
   }
 
   void moveToIdle() {
-    uiState = UiState.idle;
-    notifyListeners();
+    state = UiState.idle;
   }
 }
