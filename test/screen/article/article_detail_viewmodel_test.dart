@@ -9,7 +9,7 @@ void main() {
     final viewModel = ArticleDetailViewModel(
       articleRepository: articleRepository,
     );
-    expect(viewModel.uiState, UiState.initial);
+    expect(viewModel.state, isA<Initial>());
 
     articleRepository.getByIdResult = Article(
         articleId: "articleId1",
@@ -20,7 +20,7 @@ void main() {
         score: 0.2);
     await viewModel.fetchData("articleId1");
 
-    expect(viewModel.uiState, UiState.success);
+    expect(viewModel.state, isA<Success>());
   });
 
   test("Loading->error", () async {
@@ -28,10 +28,10 @@ void main() {
     final viewModel = ArticleDetailViewModel(
       articleRepository: articleRepository,
     );
-    expect(viewModel.uiState, UiState.initial);
+    expect(viewModel.state, isA<Initial>());
 
     articleRepository.getByIdError = Exception("Network error");
     await viewModel.fetchData("articleId1");
-    expect(viewModel.uiState, UiState.error);
+    expect(viewModel.state, isA<Error>());
   });
 }

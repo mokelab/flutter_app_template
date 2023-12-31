@@ -1,31 +1,44 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:template/model/article.dart';
 import 'package:template/repository/article_repository.dart';
 
-enum UiState {
-  initial,
-  loading,
-  success,
-  error,
-}
-
-class ArticleDetailViewModel extends ChangeNotifier {
+class ArticleDetailViewModel extends StateNotifier<UiState> {
   final ArticleRepository articleRepository;
-  UiState uiState = UiState.initial;
-  Article? article;
 
-  ArticleDetailViewModel({required this.articleRepository});
+  ArticleDetailViewModel({required this.articleRepository})
+      : super(const Initial());
 
   Future<void> fetchData(ArticleId articleId) async {
-    uiState = UiState.loading;
-    notifyListeners();
+    state = const Loading();
     try {
-      article = await articleRepository.getById(articleId);
-      uiState = UiState.success;
-      notifyListeners();
+      final article = await articleRepository.getById(articleId);
+      state = Success(article: article);
     } catch (e) {
-      uiState = UiState.error;
-      notifyListeners();
+      state = Error(e: e);
     }
   }
+}
+
+sealed class UiState {
+  const UiState();
+}
+
+class Initial extends UiState {
+  const Initial() : super();
+}
+
+class Loading extends UiState {
+  const Loading() : super();
+}
+
+class Success extends UiState {
+  final Article article;
+
+  const Success({required this.article});
+}
+
+class Error extends UiState {
+  final Object e;
+
+  const Error({required this.e});
 }

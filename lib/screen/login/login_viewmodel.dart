@@ -1,45 +1,55 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:template/repository/account_repository.dart';
 
-enum UiState {
-  idle,
-  emptyInput,
-  loginInProgress,
-  success,
-  error,
-}
-
-class LoginViewModel extends ChangeNotifier {
+class LoginViewModel extends StateNotifier<UiState> {
   final AccountRepository accountRepository;
 
-  LoginViewModel(this.accountRepository);
-
-  UiState uiState = UiState.idle;
+  LoginViewModel(this.accountRepository) : super(const Idle());
 
   Future<void> login(String email, String password) async {
     if (email.trim().isEmpty || password.trim().isEmpty) {
-      uiState = UiState.emptyInput;
-      notifyListeners();
+      state = const EmptyInput();
       return;
     }
     try {
-      uiState = UiState.loginInProgress;
-      notifyListeners();
+      state = const LoginInProgress();
 
       final account = await accountRepository.login(email, password);
       // check account state if needed
 
-      uiState = UiState.success;
-      notifyListeners();
+      state = const Success();
     } catch (e) {
       // show error
-      uiState = UiState.error;
-      notifyListeners();
+      state = Error(e: e);
     }
   }
 
   void moveToIdle() {
-    uiState = UiState.idle;
-    notifyListeners();
+    state = const Idle();
   }
+}
+
+sealed class UiState {
+  const UiState();
+}
+
+class Idle extends UiState {
+  const Idle() : super();
+}
+
+class EmptyInput extends UiState {
+  const EmptyInput() : super();
+}
+
+class LoginInProgress extends UiState {
+  const LoginInProgress() : super();
+}
+
+class Success extends UiState {
+  const Success() : super();
+}
+
+class Error extends UiState {
+  const Error({required this.e}) : super();
+  final Object e;
 }

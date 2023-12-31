@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:template/model/article.dart';
 
 import '../../app_module.dart';
 import 'article_detail_viewmodel.dart';
+
+final _viewModelProvider =
+    StateNotifierProvider<ArticleDetailViewModel, UiState>((ref) {
+  final articleRepository = ref.read(articleRepositoryProvider);
+  return ArticleDetailViewModel(articleRepository: articleRepository);
+});
 
 class ArticleDetailScreen extends StatelessWidget {
   final ArticleId articleId;
@@ -11,59 +17,59 @@ class ArticleDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final module = Provider.of<AppModule>(context, listen: false);
-    return MultiProvider(providers: [
-      ChangeNotifierProvider(
-          create: (context) => ArticleDetailViewModel(
-                articleRepository: module.articleRepository(),
-              )),
-    ], child: _ArticleDetailScreen(articleId: articleId));
+    return ProviderScope(
+      child: _ArticleDetailScreen(articleId: articleId),
+    );
   }
 }
 
-class _ArticleDetailScreen extends StatefulWidget {
+class _ArticleDetailScreen extends ConsumerStatefulWidget {
   final ArticleId articleId;
 
   const _ArticleDetailScreen({required this.articleId});
+
   @override
-  State<StatefulWidget> createState() => _ArticleListScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _ArticleListScreenState();
 }
 
-class _ArticleListScreenState extends State<_ArticleDetailScreen> {
+class _ArticleListScreenState extends ConsumerState<_ArticleDetailScreen> {
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final viewModel = context.watch<ArticleDetailViewModel>();
-    switch (viewModel.uiState) {
-      case UiState.initial:
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          viewModel.fetchData(widget.articleId);
-        });
-        break;
-      case UiState.loading:
-      case UiState.success:
-      case UiState.error:
-        break;
-    }
+  void initState() {
+    ref.listenManual(_viewModelProvider, (previous, next) {
+      switch (next) {
+        case Initial():
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            final viewModel = ref.read(_viewModelProvider.notifier);
+            viewModel.fetchData(widget.articleId);
+          });
+          break;
+        case Loading():
+        case Success():
+        case Error():
+          break;
+      }
+    });
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<ArticleDetailViewModel>();
-    switch (viewModel.uiState) {
-      case UiState.initial:
-      case UiState.loading:
+    final uiState = ref.watch(_viewModelProvider);
+    switch (uiState) {
+      case Initial():
+      case Loading():
         return const Scaffold(body: Center(child: CircularProgressIndicator()));
-      case UiState.success:
+      case Success(article: final article):
         return Scaffold(
           appBar: AppBar(
-            title: Text(viewModel.article!.subject),
+            title: Text(article.subject),
           ),
           body: Center(
-            child: Text(viewModel.article!.body),
+            child: Text(article.body),
           ),
         );
-      case UiState.error:
+      case Error():
         return _buildError(context);
     }
   }

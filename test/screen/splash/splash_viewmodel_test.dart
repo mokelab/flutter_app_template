@@ -10,7 +10,7 @@ void main() {
 
     final viewModel = SplashViewModel(accountRepository);
     await viewModel.setup();
-    expect(viewModel.uiState, UiState.showLogin);
+    expect(viewModel.state, isA<ShowLogin>());
   });
 
   test("setup_already_login", () async {
@@ -20,7 +20,7 @@ void main() {
 
     final viewModel = SplashViewModel(accountRepository);
     await viewModel.setup();
-    expect(viewModel.uiState, UiState.showTop);
+    expect(viewModel.state, isA<ShowTop>());
   });
 
   test("setup_error", () async {
@@ -29,6 +29,6 @@ void main() {
 
     final viewModel = SplashViewModel(accountRepository);
     await viewModel.setup();
-    expect(viewModel.uiState, UiState.showLogin);
+    expect(viewModel.state, isA<ShowLogin>());
   });
 }
