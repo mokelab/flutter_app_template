@@ -1,7 +1,7 @@
 import 'package:test/test.dart';
-import 'package:template/model/account.dart';
-import 'package:template/repository/mock/mock_account_repository.dart';
-import 'package:template/screen/splash/splash_viewmodel.dart';
+import 'package:core_model/account.dart';
+import 'package:core_data_mock/mock_account_repository.dart';
+import 'package:feature_login/splash_viewmodel.dart';
 
 void main() {
   test("setup_first_launch", () async {

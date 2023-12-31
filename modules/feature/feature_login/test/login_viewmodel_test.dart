@@ -1,6 +1,6 @@
 import 'package:core_model/account.dart';
-import 'package:template/repository/mock/mock_account_repository.dart';
-import 'package:template/screen/login/login_viewmodel.dart';
+import 'package:core_data_mock/mock_account_repository.dart';
+import 'package:feature_login/login_viewmodel.dart';
 import 'package:test/test.dart';
 
 void main() {

@@ -36,7 +36,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   test: ^1.24.1
-  infinite_scroll_pagination: ^4.0.0
   go_router: ^13.0.0
   flutter_riverpod: ^2.4.9
   go_router_builder: ^2.4.0
@@ -48,6 +47,8 @@ dependencies:
     path: ./modules/core/core_data_mock
   feature_login:
     path: ./modules/feature/feature_login
+  feature_article:
+    path: ./modules/feature/feature_article
 
 dev_dependencies:
   flutter_test:

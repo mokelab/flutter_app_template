@@ -1,9 +1,9 @@
+import 'package:feature_article/article_detail_screen.dart';
+import 'package:feature_article/article_list_screen.dart';
 import 'package:feature_login/login_screen.dart';
 import 'package:feature_login/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:template/screen/article/article_detail_screen.dart';
-import 'package:template/screen/article/article_list_screen.dart';
 import 'package:template/top_screen.dart';
 
 part 'routes.g.dart';
@@ -13,12 +13,14 @@ class SplashRouteData extends GoRouteData {
   const SplashRouteData();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      SplashScreen(toLogin: () {
-        const LoginRouteData().go(context);
-      }, toTop: () {
-        const ArticleListRouteData().go(context);
-      });
+  Widget build(BuildContext context, GoRouterState state) => SplashScreen(
+        toLogin: () {
+          const LoginRouteData().go(context);
+        },
+        toTop: () {
+          const ArticleListRouteData().go(context);
+        },
+      );
 }
 
 @TypedGoRoute<LoginRouteData>(path: "/login")
@@ -86,8 +88,11 @@ class ArticleListRouteData extends GoRouteData {
   const ArticleListRouteData();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const ArticleListScreen();
+  Widget build(BuildContext context, GoRouterState state) => ArticleListScreen(
+        toDetail: (articleId) {
+          ArticleDetailRouteData(id: articleId).go(context);
+        },
+      );
 }
 
 class ArticleDetailRouteData extends GoRouteData {

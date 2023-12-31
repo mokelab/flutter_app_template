@@ -214,6 +214,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
+  feature_article:
+    dependency: "direct main"
+    description:
+      path: "modules/feature/feature_article"
+      relative: true
+    source: path
+    version: "0.0.1"
   feature_login:
     dependency: "direct main"
     description:
@@ -333,7 +340,7 @@ packages:
     source: hosted
     version: "4.0.2"
   infinite_scroll_pagination:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: infinite_scroll_pagination
       sha256: b68bce20752fcf36c7739e60de4175494f74e99e9a69b4dd2fe3a1dd07a7f16a

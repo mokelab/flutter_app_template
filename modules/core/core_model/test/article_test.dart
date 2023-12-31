@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:template/model/article.dart';
+import 'package:core_model/article.dart';
 import 'package:test/test.dart';
 
 void main() {

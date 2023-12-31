@@ -1,6 +1,6 @@
-import 'package:template/model/article.dart';
-import 'package:template/repository/mock/mock_article_repository.dart';
-import 'package:template/screen/article/article_detail_viewmodel.dart';
+import 'package:core_model/article.dart';
+import 'package:core_data_mock/mock_article_repository.dart';
+import 'package:feature_article/article_detail_viewmodel.dart';
 import 'package:test/test.dart';
 
 void main() {
