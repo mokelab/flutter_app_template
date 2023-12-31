@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'mock_module.dart';
 import 'routes.dart';
@@ -19,7 +20,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      routerConfig: router,
+      routerConfig: GoRouter(routes: $appRoutes),
     );
   }
 }

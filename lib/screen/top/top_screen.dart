@@ -1,13 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:template/screen/article/article_list_screen.dart';
+import 'package:go_router/go_router.dart';
 
-class TopScreen extends StatefulWidget {
-  const TopScreen({super.key});
+class TopScreen extends StatelessWidget {
+  const TopScreen({
+    required this.navigationShell,
+    super.key,
+  });
+
+  final StatefulNavigationShell navigationShell;
 
   @override
-  State<StatefulWidget> createState() => _TopScreenState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: navigationShell,
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: navigationShell.currentIndex,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle), label: "Account"),
+        ],
+        onTap: (index) {
+          navigationShell.goBranch(
+            index,
+            initialLocation: index == navigationShell.currentIndex,
+          );
+        },
+      ),
+    );
+  }
 }
 
+/*
 class _TopScreenState extends State<TopScreen> {
   int _currentTabIndex = 0;
   late List<Widget> _screens;
@@ -43,3 +68,5 @@ class _TopScreenState extends State<TopScreen> {
         body: _screens[_currentTabIndex]);
   }
 }
+
+*/

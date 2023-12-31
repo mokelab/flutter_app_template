@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:template/app_module.dart';
+import 'package:template/routes.dart';
 import "login_viewmodel.dart";
 
 final viewModelProvider = StateNotifierProvider<LoginViewModel, UiState>((ref) {
@@ -28,6 +28,7 @@ class LoginScreenMain extends ConsumerStatefulWidget {
 class _LoginScreenState extends ConsumerState<LoginScreenMain> {
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
+  ProviderSubscription? _subscription;
 
   void _login() async {
     final email = _emailController.text;
@@ -40,7 +41,7 @@ class _LoginScreenState extends ConsumerState<LoginScreenMain> {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
-    ref.listenManual(viewModelProvider, (previous, next) {
+    _subscription = ref.listenManual(viewModelProvider, (previous, next) {
       switch (next) {
         case Idle():
         case LoginInProgress():
@@ -58,7 +59,7 @@ class _LoginScreenState extends ConsumerState<LoginScreenMain> {
         case Success():
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
-            context.go("/top");
+            const ArticleListRouteData().go(context);
           });
           break;
         case Error():
@@ -82,6 +83,7 @@ class _LoginScreenState extends ConsumerState<LoginScreenMain> {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _subscription?.close();
   }
 
   @override

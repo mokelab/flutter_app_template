@@ -16,6 +16,7 @@ class LoginViewModel extends StateNotifier<UiState> {
 
       final account = await accountRepository.login(email, password);
       // check account state if needed
+      account.toString(); // suppress warning
 
       state = const Success();
     } catch (e) {
