@@ -10,7 +10,7 @@ void main() {
 
     final viewModel = LoginViewModel(accountRepository);
     await viewModel.login("test@example.com", "password");
-    expect(viewModel.uiState, UiState.success);
+    expect(viewModel.state, isA<Success>());
   });
 
   test("login_empty_email", () async {
@@ -19,9 +19,9 @@ void main() {
 
     final viewModel = LoginViewModel(accountRepository);
     await viewModel.login("", "password");
-    expect(viewModel.uiState, UiState.emptyInput);
+    expect(viewModel.state, isA<EmptyInput>());
     viewModel.moveToIdle();
-    expect(viewModel.uiState, UiState.idle);
+    expect(viewModel.state, isA<Idle>());
   });
 
   test("login_empty_password", () async {
@@ -30,9 +30,9 @@ void main() {
 
     final viewModel = LoginViewModel(accountRepository);
     await viewModel.login("test@example.com", "");
-    expect(viewModel.uiState, UiState.emptyInput);
+    expect(viewModel.state, isA<EmptyInput>());
     viewModel.moveToIdle();
-    expect(viewModel.uiState, UiState.idle);
+    expect(viewModel.state, isA<Idle>());
   });
 
   test("login_repo_error", () async {
@@ -41,6 +41,6 @@ void main() {
 
     final viewModel = LoginViewModel(accountRepository);
     await viewModel.login("test@example.com", "password");
-    expect(viewModel.uiState, UiState.error);
+    expect(viewModel.state, isA<Error>());
   });
 }

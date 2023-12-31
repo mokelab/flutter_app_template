@@ -42,11 +42,11 @@ class _LoginScreenState extends ConsumerState<LoginScreenMain> {
     _passwordController = TextEditingController();
     ref.listenManual(viewModelProvider, (previous, next) {
       switch (next) {
-        case UiState.idle:
-        case UiState.loginInProgress:
+        case Idle():
+        case LoginInProgress():
           // nop
           break;
-        case UiState.emptyInput:
+        case EmptyInput():
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
             const snackBar =
@@ -55,13 +55,13 @@ class _LoginScreenState extends ConsumerState<LoginScreenMain> {
             ref.read(viewModelProvider.notifier).moveToIdle();
           });
           break;
-        case UiState.success:
+        case Success():
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
             context.go("/top");
           });
           break;
-        case UiState.error:
+        case Error():
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
             showDialog(

@@ -28,19 +28,20 @@ class SplashScreenMain extends ConsumerStatefulWidget {
 }
 
 class _SplashScreenState extends ConsumerState<SplashScreenMain> {
+  ProviderSubscription? _subscription;
   @override
   void initState() {
-    ref.listenManual(_viewModelProvider, (previous, next) {
+    _subscription = ref.listenManual(_viewModelProvider, (previous, next) {
       switch (next) {
-        case UiState.initial:
+        case Initial():
           break;
-        case UiState.showLogin:
+        case ShowLogin():
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
             context.go("/login");
           });
           break;
-        case UiState.showTop:
+        case ShowTop():
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
             context.go("/top");
@@ -50,6 +51,12 @@ class _SplashScreenState extends ConsumerState<SplashScreenMain> {
     });
     ref.read(_viewModelProvider.notifier).setup();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _subscription?.close();
+    super.dispose();
   }
 
   @override
