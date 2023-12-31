@@ -34,23 +34,29 @@ class _ArticleDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _ArticleListScreenState extends ConsumerState<_ArticleDetailScreen> {
+  ProviderSubscription? _subscription;
   @override
   void initState() {
-    ref.listenManual(_viewModelProvider, (previous, next) {
+    _subscription = ref.listenManual(_viewModelProvider, (previous, next) {
       switch (next) {
         case Initial():
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            final viewModel = ref.read(_viewModelProvider.notifier);
-            viewModel.fetchData(widget.articleId);
-          });
-          break;
         case Loading():
         case Success():
         case Error():
           break;
       }
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final viewModel = ref.read(_viewModelProvider.notifier);
+      viewModel.fetchData(widget.articleId);
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _subscription?.close();
+    super.dispose();
   }
 
   @override
@@ -59,7 +65,9 @@ class _ArticleListScreenState extends ConsumerState<_ArticleDetailScreen> {
     switch (uiState) {
       case Initial():
       case Loading():
-        return const Scaffold(body: Center(child: CircularProgressIndicator()));
+        return const Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        );
       case Success(article: final article):
         return Scaffold(
           appBar: AppBar(

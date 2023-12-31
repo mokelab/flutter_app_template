@@ -58,22 +58,36 @@ extension $LoginRouteDataExtension on LoginRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $topRouteData => GoRouteData.$route(
-      path: '/top',
+RouteBase get $topRouteData => StatefulShellRouteData.$route(
       factory: $TopRouteDataExtension._fromState,
-      routes: [
-        GoRouteData.$route(
-          path: 'articles/:id',
-          factory: $ArticleDetailRouteDataExtension._fromState,
+      branches: [
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
+              path: '/articles',
+              factory: $ArticleListRouteDataExtension._fromState,
+              routes: [
+                GoRouteData.$route(
+                  path: ':id',
+                  factory: $ArticleDetailRouteDataExtension._fromState,
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     );
 
 extension $TopRouteDataExtension on TopRouteData {
   static TopRouteData _fromState(GoRouterState state) => const TopRouteData();
+}
+
+extension $ArticleListRouteDataExtension on ArticleListRouteData {
+  static ArticleListRouteData _fromState(GoRouterState state) =>
+      const ArticleListRouteData();
 
   String get location => GoRouteData.$location(
-        '/top',
+        '/articles',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -93,7 +107,7 @@ extension $ArticleDetailRouteDataExtension on ArticleDetailRouteData {
       );
 
   String get location => GoRouteData.$location(
-        '/top/articles/${Uri.encodeComponent(id)}',
+        '/articles/${Uri.encodeComponent(id)}',
       );
 
   void go(BuildContext context) => context.go(location);

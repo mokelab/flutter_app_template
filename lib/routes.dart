@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:template/screen/article/article_detail_screen.dart';
+import 'package:template/screen/article/article_list_screen.dart';
 import 'package:template/screen/login/login_screen.dart';
 import 'package:template/screen/top/top_screen.dart';
 
@@ -26,17 +27,47 @@ class LoginRouteData extends GoRouteData {
       const LoginScreen();
 }
 
-@TypedGoRoute<TopRouteData>(
-  path: "/top",
-  routes: [
-    TypedGoRoute<ArticleDetailRouteData>(path: "articles/:id"),
+@TypedStatefulShellRoute<TopRouteData>(
+  branches: [
+    TypedStatefulShellBranch<ArticleBranchData>(
+      routes: [
+        TypedGoRoute<ArticleListRouteData>(
+          path: "/articles",
+          routes: [
+            TypedGoRoute<ArticleDetailRouteData>(
+              path: ":id",
+            ),
+          ],
+        ),
+      ],
+    ),
   ],
 )
-class TopRouteData extends GoRouteData {
+class TopRouteData extends StatefulShellRouteData {
   const TopRouteData();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) => const TopScreen();
+  Widget builder(
+    BuildContext context,
+    GoRouterState state,
+    StatefulNavigationShell navigationShell,
+  ) {
+    return TopScreen(
+      navigationShell: navigationShell,
+    );
+  }
+}
+
+class ArticleBranchData extends StatefulShellBranchData {
+  const ArticleBranchData();
+}
+
+class ArticleListRouteData extends GoRouteData {
+  const ArticleListRouteData();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const ArticleListScreen();
 }
 
 class ArticleDetailRouteData extends GoRouteData {

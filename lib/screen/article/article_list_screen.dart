@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:template/app_module.dart';
 import 'package:template/model/article.dart';
+import 'package:template/routes.dart';
 
 class ArticleListScreen extends ConsumerStatefulWidget {
   const ArticleListScreen({super.key});
@@ -55,7 +55,7 @@ class _ArticleListScreenState extends ConsumerState<ArticleListScreen> {
         return ListTile(
           title: Text(article.subject),
           onTap: () {
-            context.go("/top/articles/${article.articleId}");
+            ArticleDetailRouteData(id: article.articleId).go(context);
           },
         );
       }),

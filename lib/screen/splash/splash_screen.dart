@@ -44,7 +44,7 @@ class _SplashScreenState extends ConsumerState<SplashScreenMain> {
         case ShowTop():
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
-            const TopRouteData().go(context);
+            const ArticleListRouteData().go(context);
           });
           break;
       }
