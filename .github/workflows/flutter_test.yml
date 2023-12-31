@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: "Install Flutter"
-        run: sh ./.github/workflows/scripts/install-flutter.sh 3.10.0
+        run: sh ./.github/workflows/scripts/install-flutter.sh 3.16.4
       - run: flutter pub get
       - name: Run test
         run: flutter test --machine > test_report.log
