@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:template/app_module.dart';
-import 'package:template/model/article.dart';
+import 'package:core_model/article.dart';
 import 'package:template/routes.dart';
 
 class ArticleListScreen extends ConsumerStatefulWidget {

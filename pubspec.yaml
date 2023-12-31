@@ -40,6 +40,8 @@ dependencies:
   go_router: ^13.0.0
   flutter_riverpod: ^2.4.9
   go_router_builder: ^2.4.0
+  core_model:
+    path: ./modules/core/core_model
 
 dev_dependencies:
   flutter_test:

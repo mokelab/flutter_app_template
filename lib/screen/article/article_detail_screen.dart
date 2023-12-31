@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:template/model/article.dart';
+import 'package:core_model/article.dart';
 
 import '../../app_module.dart';
 import 'article_detail_viewmodel.dart';

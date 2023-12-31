@@ -1,5 +1,5 @@
-import 'package:template/model/account.dart';
-import 'package:template/model/article.dart';
+import 'package:core_model/account.dart';
+import 'package:core_model/article.dart';
 import 'package:template/repository/mock/mock_article_repository.dart';
 
 import "app_module.dart";

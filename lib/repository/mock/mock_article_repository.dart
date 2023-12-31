@@ -1,4 +1,4 @@
-import 'package:template/model/article.dart';
+import 'package:core_model/article.dart';
 import 'package:template/repository/article_repository.dart';
 
 class MockArticleRepository implements ArticleRepository {

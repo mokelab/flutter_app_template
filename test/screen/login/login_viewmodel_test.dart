@@ -1,4 +1,4 @@
-import 'package:template/model/account.dart';
+import 'package:core_model/account.dart';
 import 'package:template/repository/mock/mock_account_repository.dart';
 import 'package:template/screen/login/login_viewmodel.dart';
 import 'package:test/test.dart';

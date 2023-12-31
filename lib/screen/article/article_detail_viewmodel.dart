@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:template/model/article.dart';
+import 'package:core_model/article.dart';
 import 'package:template/repository/article_repository.dart';
 
 class ArticleDetailViewModel extends StateNotifier<UiState> {

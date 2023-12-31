@@ -1,4 +1,4 @@
-import 'package:template/model/article.dart';
+import 'package:core_model/article.dart';
 
 abstract class ArticleRepository {
   Future<List<Article>> getList(DateTime start);
