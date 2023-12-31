@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:template/app_module.dart';
+import 'package:template/routes.dart';
 import 'package:template/screen/splash/splash_viewmodel.dart';
 
 final _viewModelProvider = StateNotifierProvider<SplashViewModel, UiState>(
@@ -38,13 +38,13 @@ class _SplashScreenState extends ConsumerState<SplashScreenMain> {
         case ShowLogin():
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
-            context.go("/login");
+            const LoginRouteData().go(context);
           });
           break;
         case ShowTop():
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
-            context.go("/top");
+            const TopRouteData().go(context);
           });
           break;
       }

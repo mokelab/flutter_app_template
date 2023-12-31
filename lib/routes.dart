@@ -6,28 +6,44 @@ import 'package:template/screen/top/top_screen.dart';
 
 import 'screen/splash/splash_screen.dart';
 
-final GoRouter router = GoRouter(
+part 'routes.g.dart';
+
+@TypedGoRoute<SplashRouteData>(path: "/")
+class SplashRouteData extends GoRouteData {
+  const SplashRouteData();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const SplashScreen();
+}
+
+@TypedGoRoute<LoginRouteData>(path: "/login")
+class LoginRouteData extends GoRouteData {
+  const LoginRouteData();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const LoginScreen();
+}
+
+@TypedGoRoute<TopRouteData>(
+  path: "/top",
   routes: [
-    GoRoute(
-      path: '/',
-      pageBuilder: (context, state) =>
-          const MaterialPage(child: SplashScreen()),
-    ),
-    GoRoute(
-      path: '/login',
-      pageBuilder: (context, state) => const MaterialPage(child: LoginScreen()),
-    ),
-    GoRoute(
-        path: '/top',
-        pageBuilder: (context, state) => const MaterialPage(child: TopScreen()),
-        routes: [
-          GoRoute(
-            path: 'articles/:id',
-            pageBuilder: (context, state) => MaterialPage(
-              child:
-                  ArticleDetailScreen(articleId: state.pathParameters["id"]!),
-            ),
-          ),
-        ]),
+    TypedGoRoute<ArticleDetailRouteData>(path: "articles/:id"),
   ],
-);
+)
+class TopRouteData extends GoRouteData {
+  const TopRouteData();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const TopScreen();
+}
+
+class ArticleDetailRouteData extends GoRouteData {
+  const ArticleDetailRouteData({required this.id});
+  final String id;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      ArticleDetailScreen(articleId: id);
+}
