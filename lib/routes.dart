@@ -1,11 +1,10 @@
+import 'package:feature_login/login_screen.dart';
+import 'package:feature_login/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:template/screen/article/article_detail_screen.dart';
 import 'package:template/screen/article/article_list_screen.dart';
-import 'package:template/screen/login/login_screen.dart';
 import 'package:template/screen/top/top_screen.dart';
-
-import 'screen/splash/splash_screen.dart';
 
 part 'routes.g.dart';
 
@@ -15,7 +14,11 @@ class SplashRouteData extends GoRouteData {
 
   @override
   Widget build(BuildContext context, GoRouterState state) =>
-      const SplashScreen();
+      SplashScreen(toLogin: () {
+        const LoginRouteData().go(context);
+      }, toTop: () {
+        const ArticleListRouteData().go(context);
+      });
 }
 
 @TypedGoRoute<LoginRouteData>(path: "/login")
@@ -23,8 +26,11 @@ class LoginRouteData extends GoRouteData {
   const LoginRouteData();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) =>
-      const LoginScreen();
+  Widget build(BuildContext context, GoRouterState state) => LoginScreen(
+        toTop: () {
+          const ArticleListRouteData().go(context);
+        },
+      );
 }
 
 @TypedStatefulShellRoute<TopRouteData>(

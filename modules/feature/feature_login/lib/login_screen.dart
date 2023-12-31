@@ -1,7 +1,6 @@
 import 'package:core_data_api/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:template/routes.dart';
 import "login_viewmodel.dart";
 
 final viewModelProvider = StateNotifierProvider<LoginViewModel, UiState>((ref) {
@@ -10,22 +9,32 @@ final viewModelProvider = StateNotifierProvider<LoginViewModel, UiState>((ref) {
 });
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({
+    super.key,
+    required this.toTop,
+  });
+  final VoidCallback toTop;
 
   @override
   Widget build(BuildContext context) {
-    return const ProviderScope(child: LoginScreenMain());
+    return ProviderScope(
+        child: _LoginScreen(
+      toTop: toTop,
+    ));
   }
 }
 
-class LoginScreenMain extends ConsumerStatefulWidget {
-  const LoginScreenMain({super.key});
+class _LoginScreen extends ConsumerStatefulWidget {
+  const _LoginScreen({
+    required this.toTop,
+  });
+  final VoidCallback toTop;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreenMain> {
+class _LoginScreenState extends ConsumerState<_LoginScreen> {
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
   ProviderSubscription? _subscription;
@@ -59,7 +68,7 @@ class _LoginScreenState extends ConsumerState<LoginScreenMain> {
         case Success():
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
-            const ArticleListRouteData().go(context);
+            widget.toTop();
           });
           break;
         case Error():

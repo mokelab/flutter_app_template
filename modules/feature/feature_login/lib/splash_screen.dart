@@ -1,8 +1,7 @@
 import 'package:core_data_api/providers.dart';
+import 'package:feature_login/splash_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:template/routes.dart';
-import 'package:template/screen/splash/splash_viewmodel.dart';
 
 final _viewModelProvider = StateNotifierProvider<SplashViewModel, UiState>(
   (ref) {
@@ -12,22 +11,37 @@ final _viewModelProvider = StateNotifierProvider<SplashViewModel, UiState>(
 );
 
 class SplashScreen extends StatelessWidget {
-  const SplashScreen({super.key});
+  const SplashScreen({
+    super.key,
+    required this.toLogin,
+    required this.toTop,
+  });
+  final VoidCallback toLogin;
+  final VoidCallback toTop;
 
   @override
   Widget build(BuildContext context) {
-    return const ProviderScope(child: SplashScreenMain());
+    return ProviderScope(
+        child: _SplashScreen(
+      toLogin: toLogin,
+      toTop: toTop,
+    ));
   }
 }
 
-class SplashScreenMain extends ConsumerStatefulWidget {
-  const SplashScreenMain({super.key});
+class _SplashScreen extends ConsumerStatefulWidget {
+  const _SplashScreen({
+    required this.toLogin,
+    required this.toTop,
+  });
+  final VoidCallback toLogin;
+  final VoidCallback toTop;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends ConsumerState<SplashScreenMain> {
+class _SplashScreenState extends ConsumerState<_SplashScreen> {
   ProviderSubscription? _subscription;
   @override
   void initState() {
@@ -38,13 +52,13 @@ class _SplashScreenState extends ConsumerState<SplashScreenMain> {
         case ShowLogin():
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
-            const LoginRouteData().go(context);
+            widget.toLogin();
           });
           break;
         case ShowTop():
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
-            const ArticleListRouteData().go(context);
+            widget.toTop();
           });
           break;
       }

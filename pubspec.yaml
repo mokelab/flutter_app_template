@@ -46,6 +46,8 @@ dependencies:
     path: ./modules/core/core_data_api
   core_data_mock:
     path: ./modules/core/core_data_mock
+  feature_login:
+    path: ./modules/feature/feature_login
 
 dev_dependencies:
   flutter_test:
