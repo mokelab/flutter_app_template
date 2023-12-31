@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:template/screen/article/article_detail_screen.dart';
 import 'package:template/screen/article/article_list_screen.dart';
-import 'package:template/screen/top/top_screen.dart';
+import 'package:template/top_screen.dart';
 
 part 'routes.g.dart';
 
