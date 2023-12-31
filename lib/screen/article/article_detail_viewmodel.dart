@@ -5,10 +5,11 @@ import 'package:template/repository/article_repository.dart';
 class ArticleDetailViewModel extends StateNotifier<UiState> {
   final ArticleRepository articleRepository;
 
-  ArticleDetailViewModel({required this.articleRepository}) : super(Initial());
+  ArticleDetailViewModel({required this.articleRepository})
+      : super(const Initial());
 
   Future<void> fetchData(ArticleId articleId) async {
-    state = Loading();
+    state = const Loading();
     try {
       final article = await articleRepository.getById(articleId);
       state = Success(article: article);
@@ -18,20 +19,26 @@ class ArticleDetailViewModel extends StateNotifier<UiState> {
   }
 }
 
-sealed class UiState {}
+sealed class UiState {
+  const UiState();
+}
 
-class Initial extends UiState {}
+class Initial extends UiState {
+  const Initial() : super();
+}
 
-class Loading extends UiState {}
+class Loading extends UiState {
+  const Loading() : super();
+}
 
 class Success extends UiState {
   final Article article;
 
-  Success({required this.article});
+  const Success({required this.article});
 }
 
 class Error extends UiState {
   final Object e;
 
-  Error({required this.e});
+  const Error({required this.e});
 }
