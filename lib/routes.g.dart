@@ -75,6 +75,22 @@ RouteBase get $topRouteData => StatefulShellRouteData.$route(
             ),
           ],
         ),
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
+              path: '/search',
+              factory: $SearchTopRouteDataExtension._fromState,
+            ),
+          ],
+        ),
+        StatefulShellBranchData.$branch(
+          routes: [
+            GoRouteData.$route(
+              path: '/account',
+              factory: $AccountRouteDataExtension._fromState,
+            ),
+          ],
+        ),
       ],
     );
 
@@ -108,6 +124,42 @@ extension $ArticleDetailRouteDataExtension on ArticleDetailRouteData {
 
   String get location => GoRouteData.$location(
         '/articles/${Uri.encodeComponent(id)}',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $SearchTopRouteDataExtension on SearchTopRouteData {
+  static SearchTopRouteData _fromState(GoRouterState state) =>
+      const SearchTopRouteData();
+
+  String get location => GoRouteData.$location(
+        '/search',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $AccountRouteDataExtension on AccountRouteData {
+  static AccountRouteData _fromState(GoRouterState state) =>
+      const AccountRouteData();
+
+  String get location => GoRouteData.$location(
+        '/account',
       );
 
   void go(BuildContext context) => context.go(location);

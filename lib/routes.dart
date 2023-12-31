@@ -41,6 +41,12 @@ class LoginRouteData extends GoRouteData {
         ),
       ],
     ),
+    TypedStatefulShellBranch<SearchBranchData>(
+      routes: [TypedGoRoute<SearchTopRouteData>(path: "/search")],
+    ),
+    TypedStatefulShellBranch<AccountBranchData>(
+      routes: [TypedGoRoute<AccountRouteData>(path: "/account")],
+    ),
   ],
 )
 class TopRouteData extends StatefulShellRouteData {
@@ -62,6 +68,14 @@ class ArticleBranchData extends StatefulShellBranchData {
   const ArticleBranchData();
 }
 
+class SearchBranchData extends StatefulShellBranchData {
+  const SearchBranchData();
+}
+
+class AccountBranchData extends StatefulShellBranchData {
+  const AccountBranchData();
+}
+
 class ArticleListRouteData extends GoRouteData {
   const ArticleListRouteData();
 
@@ -77,4 +91,22 @@ class ArticleDetailRouteData extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) =>
       ArticleDetailScreen(articleId: id);
+}
+
+class SearchTopRouteData extends GoRouteData {
+  const SearchTopRouteData();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const Center(
+        child: Text("Search"),
+      );
+}
+
+class AccountRouteData extends GoRouteData {
+  const AccountRouteData();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const Center(
+        child: Text("Account"),
+      );
 }
