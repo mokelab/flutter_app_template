@@ -42,6 +42,10 @@ dependencies:
   go_router_builder: ^2.4.0
   core_model:
     path: ./modules/core/core_model
+  core_data_api:
+    path: ./modules/core/core_data_api
+  core_data_mock:
+    path: ./modules/core/core_data_mock
 
 dev_dependencies:
   flutter_test:

@@ -153,6 +153,20 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
+  core_data_api:
+    dependency: "direct main"
+    description:
+      path: "modules/core/core_data_api"
+      relative: true
+    source: path
+    version: "0.0.1"
+  core_data_mock:
+    dependency: "direct main"
+    description:
+      path: "modules/core/core_data_mock"
+      relative: true
+    source: path
+    version: "0.0.1"
   core_model:
     dependency: "direct main"
     description:

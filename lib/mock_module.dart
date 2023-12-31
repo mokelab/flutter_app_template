@@ -1,9 +1,8 @@
+import 'package:core_data_api/providers.dart';
+import 'package:core_data_mock/mock_account_repository.dart';
+import 'package:core_data_mock/mock_article_repository.dart';
 import 'package:core_model/account.dart';
 import 'package:core_model/article.dart';
-import 'package:template/repository/mock/mock_article_repository.dart';
-
-import "app_module.dart";
-import "repository/mock/mock_account_repository.dart";
 
 final mockProviders = [
   accountRepositoryProvider.overrideWith((ref) {

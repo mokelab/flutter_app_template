@@ -1,5 +1,5 @@
 import 'package:core_model/account.dart';
-import 'package:template/repository/account_repository.dart';
+import 'package:core_data_api/account_repository.dart';
 
 class MockAccountRepository implements AccountRepository {
   Account? loginWithStoredTokenResult;

@@ -1,5 +1,5 @@
 import 'package:core_model/article.dart';
-import 'package:template/repository/article_repository.dart';
+import 'package:core_data_api/article_repository.dart';
 
 class MockArticleRepository implements ArticleRepository {
   List<Article>? getListResult;

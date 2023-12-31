@@ -1,6 +1,6 @@
+import 'package:core_data_api/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:template/app_module.dart';
 import 'package:template/routes.dart';
 import 'package:template/screen/splash/splash_viewmodel.dart';
 

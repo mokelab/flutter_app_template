@@ -1,8 +1,8 @@
+import 'package:core_data_api/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:core_model/article.dart';
 
-import '../../app_module.dart';
 import 'article_detail_viewmodel.dart';
 
 final _viewModelProvider =

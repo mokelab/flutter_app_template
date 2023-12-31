@@ -1,5 +1,5 @@
+import 'package:core_data_api/account_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:template/repository/account_repository.dart';
 
 class LoginViewModel extends StateNotifier<UiState> {
   final AccountRepository accountRepository;
